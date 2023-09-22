@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SUMMARIZATION OF DATA </title>
+       <style>
+            body {
+                background: linear-gradient(to bottom, #b9edf7 50%, #677c8f 100%);
+            }
+        </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">CSV Data Display </h1>
+    <table id="csvTable" , align='center'>
+        <thead>
+            <tr id="headerRow"></tr>
+        </thead>
+        <tbody id="dataRows"></tbody>
+    </table>
+
+    <script>
+        // Fetch CSV data from S3(replace with your S3 URL) 
+        fetch('https://sampleyoloproject.s3.ap-south-1.amazonaws.com/detection_output_yolo.csv')
+        .then(response => response.text())
+        .then(data => {
+            // Parse CSV data into an array of objects
+            const rows = data.trim().split('\n');
+            const columns = rows[0].split(',');
+            
+            // Display header row
+            const headerRow = document.getElementById('headerRow');
+            columns.forEach(column => {
+                const th = document.createElement('th');
+                th.textContent = column;
+                headerRow.appendChild(th);
+            });
+
+            // Display data rows
+            const dataRows = document.getElementById('dataRows');
+            for (let i = 1; i < rows.length; i++) {
+                const rowData = rows[i].split(',');
+                const tr = document.createElement('tr');
+                rowData.forEach(cell => {
+                    const td = document.createElement('td');
+                    td.textContent = cell;
+                    tr.appendChild(td);
+                });
+                dataRows.appendChild(tr);
+            }
+        });
+    </script>
+</body>
+</html>
